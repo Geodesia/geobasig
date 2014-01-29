@@ -1,0 +1,34 @@
+body {
+  font-family: helvetica,tahoma,verdana,sans-serif;
+  font-size: 13px;
+  background-color: white !important;  
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#position {
+  color: #FFF;
+  font-family: helvetica,tahoma,verdana,sans-serif;
+  font-size: 11px;
+}
+
+#position label {
+  padding: 5px;
+}
+
+.olMapViewport {
+  background-color: #fff;
+}
+
+.olcontroloverviewmapelement {
+  background-color: #94D0D2;
+  padding: 0px;
+}
+
+.gxp-icon-permalink {
+  background-image: url(./gxp/img/silk/link.png);
+}

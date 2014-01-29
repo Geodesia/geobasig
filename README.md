@@ -1,4 +1,0 @@
-geobasig
-========
-
-IDE Geodesia
