@@ -22,7 +22,7 @@ Ext.onReady(function() {
                 activeTab: 0,                 
                 items: ["mymap",
                         {
-                			title: "Ayuda",
+                			title: "Ayudas",
                 			autoScroll: true,
                 			html: "<iframe src='ayuda.html'>"
                         }
