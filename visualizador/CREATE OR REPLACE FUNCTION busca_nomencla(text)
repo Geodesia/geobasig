@@ -1,0 +1,26 @@
+CREATE OR REPLACE FUNCTION busca_nomencla(text)
+  RETURNS text AS
+$BODY$
+DECLARE
+	nomencla ALIAS FOR $1;
+	consultapos2000 text = '';
+	consultaant2000 text = '';
+	nomencla_b text = '';
+	resant CURSOR;
+	respos CURSOR;
+
+BEGIN
+	IF substr(nomencla,8,35) = '000000000000000000000000000' THEN
+		nomencla_b = substr(nomencla,1,35);
+    ELSE
+		nomencla_b = substr(nomencla,1,39);
+	END IF;
+	consultapos2000 = "select plano, pc from planospos2000 where nomencla like '" || nomencla_b || "%' order by anio, sec; ";
+	consultapos2000 = "select plano, pc from planosant2000 where nomencla like '" || nomencla_b || "%' order by anio, sec; ";
+	respos = EXECUTE consultapos2000;
+	resant = EXECUTE consultaant2000;
+	
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE
+
