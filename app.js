@@ -1,12 +1,16 @@
 var app;
 var permalink;
 
-var nomenclatura,partido_partida,numero_plano;
-OpenLayers.ProxyHost = "prox/prox.php?url=";
-Ext.onReady(function() {	
-    GeoExt.Lang.set("es");    
-    app = new gxp.Viewer({    	
-    	proxy: "prox/prox.php?url=",
+
+var nomenclatura = new Nomenclatura(),
+    partido_partida = new PartidoPartida(),
+    numero_plano = new NumeroPlano();
+
+OpenLayers.ProxyHost = "./servicio/proxy?url=";
+Ext.onReady(function() {
+    GeoExt.Lang.set("es");
+    app = new gxp.Viewer({
+    	//proxy: "prox/prox.php?url=",
         portalConfig: {
             layout: "border",
             border: false,
@@ -21,24 +25,29 @@ Ext.onReady(function() {
                 id: "centerpanel",
                 xtype: "tabpanel",
                 region: "center",
-                activeTab: 0,                 
+                activeTab: 0,
                 items: ["mymap",
                         {
                 			title: "Ayudas",
                 			autoScroll: true,
                 			html: "<iframe src='ayuda.html'>"
+                        },
+			{
+                                        title: "Acerca de",
+                                        autoScroll: true,
+                                        html: "<iframe src='acerca.html'>"
                         }
                 ]
             },{
                 id: "westcontainer",
                 region: "west",
-                xtype: "gxp_crumbpanel",                
-                width: 300,                
+                xtype: "gxp_crumbpanel",
+                width: 300,
                 collapsible: true,
                 collapseMode: "mini",
                 hideCollapseTool: true,
                 split: true,
-                border: true                
+                border: true
             }]
         },
         // configuration of all tool plugins for this application
@@ -49,13 +58,13 @@ Ext.onReady(function() {
                 title: "Capas",
                 autoScroll: true,
                 tbar: []
-            },            
-            outputTarget: "westcontainer",            
+            },
+            outputTarget: "westcontainer",
             groups: groups,
         },{
             ptype: "gxp_addlayers",
             actionTarget: "tree.tbar",
-            outputTarget: "westcontainer",            
+            outputTarget: "westcontainer",
             upload: true
         },{
             ptype: "gxp_removelayer",
@@ -65,7 +74,7 @@ Ext.onReady(function() {
             actionTarget: ["tree.tbar", "tree.contextMenu"]
         },{
             ptype: "gxp_layerproperties",
-            outputTarget: "westcontainer",            
+            outputTarget: "westcontainer",
             actionTarget: ["tree.tbar", "tree.contextMenu"]
         },{
             ptype: "gxp_zoomtoextent",
@@ -83,7 +92,7 @@ Ext.onReady(function() {
         },{
             ptype: "gxp_wmsgetfeatureinfo",
             outputConfig: {
-                width: 300,                
+                width: 300,
                 draggable:true
             },
             format: "html",
@@ -124,7 +133,7 @@ Ext.onReady(function() {
                 iconCls: "gxp-icon-permalink",
                 handler: function() {
                     Ext.MessageBox.show({
-                        title: 'Permalink', 
+                        title: 'Permalink',
                         msg: 'Seleccione y copie el texto con Ctrl+C',
                         value: permalink,
                         multiline: true,
@@ -144,26 +153,44 @@ Ext.onReady(function() {
                         text: 'Por Partido-Partida',
                         xtype: 'menuitem',
                         handler: function() {
-                            partido_partida.mostrar();
+                            window.partido_partida.mostrar();
                         }
                     },{
                         text: 'Por Nomenclatura',
                         xtype: 'menuitem',
                         handler: function() {
-                            nomenclatura.mostrar();
+                            window.nomenclatura.mostrar();
                         }
                     },{
                         text: 'Por Numero de Plano',
                         xtype: 'menuitem',
                         handler: function() {
-                            numero_plano.mostrar();
+                            window.numero_plano.mostrar();
                         }
                     }]
 
                 }
             }]
+        },{
+            ptype: "gxp_orderlayers",
+            outputTarget: "westcontainer",
+            actionTarget: "tree.tbar"
+        },{
+            ptype: "busqueda_planos_catastro",
+            actionTarget: "map.tbar",
+            toggleGroup: "navegacion"
+        },{
+            xtype: "tbbutton",
+            actionTarget: "map.tbar",
+            actions: [{
+                text: 'Entrar',
+                iconCls: "gxp-icon-print",
+                handler: function() {
+                  app.authenticate();
+                }
+            }]
         }],
-        
+
         // layer sources
         defaultSourceType: "gxp_wmssource",
         sources: sources,
@@ -174,13 +201,13 @@ Ext.onReady(function() {
             title: "Mapa",
             projection: "EPSG:900913",
             displayProjection: "EPSG: 4326",
-            units: "m",                        
+            units: "m",
             restrictedExtent: [-7175626.9266567,-5141723.905941,-6304445.4046767,-3812835.624341],
             center: [-6768040.2321373,-4401345.9230043],
-            zoom: 6,            
+            zoom: 6,
             numZoomLevels: 23,
             stateId: "map",
-            prettyStateKeys: true,            
+            prettyStateKeys: true,
             layers: layers,
             tiled: false,
             items: [{
@@ -188,14 +215,115 @@ Ext.onReady(function() {
                 vertical: true,
                 height: 100
             }]
+        },
+    /** private: method[authenticate]
+     * Show the login dialog for the user to login.
+     */
+    authenticate: function() {
+        var panel = new Ext.FormPanel({
+            url: "/servicio/login",
+            frame: true,
+            labelWidth: 60,
+            defaultType: "textfield",
+            errorReader: {
+                read: function(response) {
+                    var success = false;
+                    var records = [];
+                    if (response.status === 200) {
+                        success = true;
+                    } else {
+                        records = [
+                            {data: {id: "username", msg: this.loginErrorText}},
+                            {data: {id: "password", msg: this.loginErrorText}}
+                        ];
+                    }
+                    return {
+                        success: success,
+                        records: records
+                    };
+                }
+            },
+            items: [{
+                fieldLabel: "Usuario",
+                name: "username",
+                width: 137,
+                allowBlank: false,
+                listeners: {
+                    render: function() {
+                        this.focus(true, 100);
+                    }
+                }
+            }, {
+                fieldLabel: "Contraseña",
+                name: "password",
+                width: 137,
+                inputType: "password",
+                allowBlank: false
+            }],
+            buttons: [{
+                text: "Entrar",
+                formBind: true,
+                handler: submitLogin,
+                scope: this
+            }],
+            keys: [{
+                key: [Ext.EventObject.ENTER],
+                handler: submitLogin,
+                scope: this
+            }]
+        });
+
+        function submitLogin() {
+            panel.buttons[0].disable();
+            panel.getForm().submit({
+                success: function(form, action) {
+                    // Ext.getCmp('paneltbar').items.each(function(tool) {
+                    //     if (tool.needsAuthorization === true) {
+                    //         tool.enable();
+                    //     }
+                    // });
+                    window.auth = true;
+                    var user = form.findField('username').getValue();
+                    this.setCookieValue(this.cookieParamName, user);
+                    this.setAuthorizedRoles(["ROLE_ADMINISTRATOR"]);
+                    this.showLogout(user);
+                    win.un("beforedestroy", this.cancelAuthentication, this);
+                    win.close();
+                },
+                failure: function(form, action) {
+                    window.auth = false;
+                    this.authorizedRoles = [];
+                    panel.buttons[0].enable();
+                    form.markInvalid({
+                        "username": this.loginErrorText,
+                        "password": this.loginErrorText
+                    });
+                },
+                scope: this
+            });
         }
+
+        var win = new Ext.Window({
+            title: this.loginText,
+            layout: "fit",
+            width: 235,
+            height: 130,
+            plain: true,
+            border: false,
+            modal: true,
+            items: [panel],
+            listeners: {
+                beforedestroy: this.cancelAuthentication,
+                scope: this
+            }
+        });
+        win.show();
+    },
+
     });
-    nomenclatura = new Nomenclatura(this);
-    partido_partida = new PartidoPartida(this);
-    numero_plano = new NumeroPlano(this);
-    app.mapPanel.map.events.register("mousemove", app.mapPanel.map, function (e) {
-        position = app.mapPanel.map.getLonLatFromViewPortPx(e.xy);
-        Ext.getCmp('position').update("<label>Latitud: " + position.lat + "</label><br/><label>Longitud: " + position.lon + "</label>");
-    });
-    
+
+    nomenclatura.init(this);
+    partido_partida.init(this);
+    numero_plano.init(this);
+
 });

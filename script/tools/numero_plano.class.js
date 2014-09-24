@@ -1,4 +1,4 @@
-var server = "http://192.168.12.133:8080/";//"http://127.0.0.1:8080/";//http://hyperdvba:8080/";
+var server = "http://www.mosp.gba.gov.ar/geoserver/";//"http://192.168.12.133:8080/";//"http://127.0.0.1:8080/";//http://hyperdvba:8080/";
 var masizos = "masizos",
 	parcelas = "parcelas";
 var workspace = "Geodesia";
@@ -8,12 +8,12 @@ var NumeroPlano = new Class({
 	win: false,
 	dom: false,
 	ext: false,
-	initialize: function(ext){
+	init: function(ext){
 		this.ext = ext;
 		this.dom = $('nomenclatura_plano');
 		this.clickEnMapa();
-		this.dom.getElement('button').addEvent('click',this.consultar.bind(this));
-		window.callbackPartidoPartida = this.procesarRespuesta.bind(this);
+		// this.dom.getElement('button').addEvent('click',this.consultar.bind(this));
+		window.callbackNumeroPlano = this.procesarRespuesta.bind(this);
 		this.capa = new OpenLayers.Layer.Vector("Consulta Numero de Plano", {
 			group: "util"
 		});
@@ -21,13 +21,43 @@ var NumeroPlano = new Class({
 	mostrar: function(){
 		var self = this;
 		if(!this.win){
+			this.form = new Ext.FormPanel({
+		      labelWidth: 60,
+		      frame: false,
+		      bodyStyle:'padding:5px 5px 0',
+		      // width: 200,
+		      // defaults: {width: 100},
+		      defaultType: 'textfield',
+		      autoHeight: true,
+		      // layout: {
+        //     	type: 'vbox',
+        //     	align: 'stretch'  // Child items are stretched to full width
+        // 	},
+		      items: [{
+		        fieldLabel: 'Partido',
+		        name: 'partido',
+		        id: 'partidoNP',
+		        anchor:'100%'  // anchor width by percentage
+		      },{
+		        fieldLabel: 'Secuencia',
+		        name: 'secuencia',
+		        id: 'secuenciaNP',
+		        anchor:'100%'  // anchor width by percentage
+		      },{
+		        fieldLabel: 'Año',
+		        name: 'anio',
+		        id: 'anioNP',
+		        anchor:'100%'  // anchor width by percentage
+		      }]
+		    });
 			this.win = new Ext.Window({
 				title		: 'Busqueda por Numero de Plano',
-				width		: 150,
-				height		: 360,
+				autoWidth		: true,
+				autoHeight: true,
 				closeAction	: 'hide',
-				contentEl	: this.dom,
+				items	: [this.form],
 				autoScroll	: true,
+				layout: 'fit',
 				onHide: function(){
 					//self.clickControl.deactivate();
 					app.mapPanel.map.removeLayer(self.capa);
@@ -35,7 +65,11 @@ var NumeroPlano = new Class({
 				onShow: function(){
 					//self.clickControl.activate();
 					app.mapPanel.map.addLayer(self.capa);
-				}
+				},
+				buttons: [{
+            		text: 'Buscar',
+            		handler: self.consultar.bind(self)
+        		}]
 			});
 		}
 		app.mapPanel.map.addLayer(this.capa);
@@ -82,17 +116,17 @@ var NumeroPlano = new Class({
                 var bounds = self.buffer.getBounds().toArray();
                 self.win.disable();
 				self.reqJsonP = new Request.JSONP({
-					url: server+'geoserver/'+workspace+'/wfs',
+					url: server+workspace+'/wfs',
 					timeout: 7000,
 					data: {
 						service: 'WFS',
 						version: '1.0.0',
 						request: 'GetFeature',
 						typeName: 'parcelas',
-						maxFeatures: '100',
+						maxFeatures: '1000',
 						srsName: app.mapPanel.map.getProjection(),
 						outputFormat: 'text/javascript',
-						format_options: 'callback:callbackProgresiva',
+						format_options: 'callback:callbackNumeroPlano',
 						filter: "<Filter><BBOX><PropertyName>the_geom</PropertyName><Box srsName='EPSG:900913'><coordinates>"+bounds[0]+","+bounds[1]+" "+bounds[2]+","+bounds[3]+"</coordinates></Box></BBOX></Filter>"
 					},
 					onTimeout: function(){
@@ -160,7 +194,7 @@ var NumeroPlano = new Class({
 							'</PropertyIsEqualTo>';
 		console.log('Filtro',filtro);
 		this.reqJsonP = new Request.JSONP({
-			url: server+'geoserver/'+workspace+'/wfs',
+			url: server+workspace+'/wfs',
 			timeout: 7000,
 			onTimeout: function(){
 				console.log('onTimeout',arguments);
@@ -172,10 +206,10 @@ var NumeroPlano = new Class({
 				version: '1.0.0',
 				request: 'GetFeature',
 				typeName: "parcelas",
-				maxFeatures: '100',
+				maxFeatures: '1000',
 				srsName: app.mapPanel.map.getProjection(),
 				outputFormat: 'text/javascript',
-				format_options: 'callback:callbackPartidoPartida',
+				format_options: 'callback:callbackNumeroPlano',
 				filter: filtro,
 			},
 		}).send();

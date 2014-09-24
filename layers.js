@@ -1,4 +1,4 @@
-var arbabc = {                
+var arbabc = {
 		        source: "arba",
 		        name: "macizos",
 		        visibility: false,
@@ -8,177 +8,164 @@ var arbabc = {
 
 var layers = [
         //CAPAS PREDEFINIDAS
-        {                
-            source: "geoserver",
-            name: "ferrocarril",
+        {
+            source: "Geodesia",
+            name: "red_ferroviaria",
             visibility: false,
             title: "Ferrocarril",
-            group: "geoserver"
-        },        
-        // CAPAS ARBA
-        {                
-            source: "ARBA",
-            name: "cotas R",
-            visibility: false,
-            title: "cotas",
-            group: "Geoserver"
-        },        {                
+            group: "IGN"
+        },
+        //CAPAS
+        {
             source: "Geodesia",
             name: "vuelos",
             visibility: false,
             title: "Vuelos",
             group: "Foto"
-        },{                
+        },{
             source: "Geodesia",
             name: "grilla_100000",
             visibility: false,
             title: "Grilla al 100000",
             group: "IGN"
-        },{                
+        },{
             source: "Geodesia",
             name: "grilla_50000",
             visibility: false,
             title: "Grilla al 50000",
             group: "IGN"
-        },{                
+        },{
             source: "Geodesia",
             name: "grilla_25000",
             visibility: false,
             title: "Grilla al 25000",
             group: "IGN"
-        },//CAPAS IGN
-        {                
-            source: "IGN",
-            name: "Secundarias",
+        },
+        //CAPAS IGN
+        {
+            source: "Geodesia",
+            name: "secundaria",
             visibility: false,
             title: "Red Secundaria",
             group: "IGN"
-        },{                
-            source: "IGN",
-            name: "Rutas_Nacionales",
+        },{
+            source: "Geodesia",
+            name: "rutas_nac",
             visibility: false,
             title: "Rutas Nacionales",
             group: "IGN"
-        },{                
+        },{
             source: "IGN",
             name: "Rutas_Provinciales",
             visibility: false,
             title: "Rutas Provinciales",
             group: "IGN"
-        },{                
-            source: "IGN",
-            name: "Red_Ferroviaria",
-            visibility: false,
-            title: "Red Ferroviaria",
-            group: "IGN"
-        },{                
-            source: "IGN",
-            name: "Ejidos_Urbanos",
+        },{
+            source: "Geodesia",
+            name: "ejidos_urbanos",
             visibility: false,
             title: "Ejidos Urbanos",
             group: "IGN"
-        },{                
-            source: "IGN",
-            name: "Cuerpos_De_Agua",
+        },{
+            source: "Geodesia",
+            name: "cuerpos_de_agua",
             visibility: false,
             title: "Cuerpos de Agua",
             group: "IGN"
-        },{                
-            source: "IGN",
-            name: "Cursos_De_Agua",
+        },{
+            source: "Geodesia",
+            name: "cursos_de_agua",
             visibility: false,
             title: "Cursos de Agua",
             group: "IGN"
-        },{                
-            source: "IGN",
-            name: "Curvas_De_Nivel",
+        },{
+            source: "Geodesia",
+            name: "curvas_de_nivel",
             visibility: false,
             title: "Curvas de Nivel",
             group: "IGN"
-        },{                
-            source: "IGN",
-            name: "Red_Vial",
-            visibility: false,
-            title: "Red Vial",
-            group: "IGN"
-        },{                
+        },
+        //CAPAS TOPO
+        {
             source: "Geodesia",
             name: "vinculaciones",
             visibility: false,
             title: "vinculaciones",
             group: "Topo"
-        },{                
+        },{
             source: "Geodesia",
             name: "mensulas",
             visibility: false,
             title: "mensulas",
             group: "Topo"
-        },{                
+        },{
             source: "Geodesia",
             name: "geoba",
             visibility: false,
             title: "Red Geoba",
             group: "Topo"
-        },{                
+        },
+	//CAPAS CARTO
+        {
             source: "Geodesia",
-            name: "Provincia",
+            name: "gr_5000",
+            visibility: false,
+            title: "Cartas 5000",
+            group: "Carto"
+        },
+	{
+            source: "Geodesia",
+            name: "gr_10000",
+            visibility: false,
+            title: "Cartas 10000",
+            group: "Carto"
+        },
+	//CAPAS GEOSERVER (GEODIGIT)
+	 {
+            source: "Geodesia",
+            name: "ParcelarioCompleto",
             visibility: true,
-            title: "Provincia",
+            title: "Parcelario",
             group: "Geoserver"
-        },{                
-            source: "Geodesia",
-            name: "circunscripcion",
-            visibility: false,
-            title: "Circunscripcion",
-            group: "Geoserver"
-        },{                
-            source: "Geodesia",
-            name: "seccion",
-            visibility: false,
-            title: "Sección",
-            group: "Geoserver"
-        },{                
-            source: "Geodesia",
-            name: "macizos",
-            visibility: false,
-            title: "Macizos",
-            group: "Geoserver"
-        },{                
-            source: "Geodesia",
-            name: "parcelas",
-            visibility: false,
-            title: "Parcelas",
-            group: "Geoserver"
-        },{                
-            source: "Geodesia",
-            name: "subparcelas",
-            visibility: false,
-            title: "Subparcelas",
-            group: "Geoserver"
-        },{                
-            source: "Geodesia",
-            name: "calles",
-            visibility: false,
-            title: "Calles",
+        },{
+	    source: "Geodesia",
+	    name: "Parcelario_Transparente",
+	    visibility: false,
+	    title: "Parcelario Transparente",
+	    group: "Geoserver"
+	},{
+            source: "Arba",
+            name: "Cotas",
+            visibility: true,
+            title: "Cotas",
             group: "Geoserver"
         },
-        
+
+	 //CAPAS TERRITORIAL
+	{
+            source: "Arba",
+            name: "Grupo ARBA",
+            visibility: false,
+            title: "Catastro", 
+            group: "Capa Territorial"
+        },
+
         // CAPAS URBASIG
-        {               
+        {
             source: "urbasig",
             name: "usos_del_suelo",
             visibility: false,
             title: "Usos del Suelo",
             group: "urbasig"
-        },{               
+        },{
             source: "urbasig",
             name: "urbanizaciones_cerradas",
             visibility: false,
             title: "Urbanizaciones Cerradas",
             group: "urbasig"
-        },        
+        },
         // CAPAS ESCUELAS
-        {                
+        {
             source: "mapaescolar",
             name: "escuelas",
             visibility: false,
@@ -187,15 +174,15 @@ var layers = [
             group: "mapaescolar"
         },
         // CAPAS HIDRAULICA
-        {                
+        {
             source: "hidraulica",
             name: "hidrografia",
             visibility: false,
             title: "Hidrografía",
             group: "hidraulica"
-        },        
+        },
         // CAPAS SALUD
-        {                
+        {
             source: "salud",
             name: "centros_de_salud",
             visibility: false,
@@ -203,7 +190,7 @@ var layers = [
             group: "salud"
         },
         // CAPAS BASE
-        {                
+        {
             source: "google",
             name: "HYBRID",
             title: "Google Híbrido",

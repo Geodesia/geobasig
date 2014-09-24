@@ -1,20 +1,15 @@
 var sources = {
-    ARBA: {
-        url: "http://cartoservices.arba.gov.ar/geoserver/cartoservice/wms?",
-        title: "cotas",
-        ptype: "gxp_wmscsource"
-    },
-    IGN: {
-		url: "http://192.168.12.133:8080/geoserver/ign/wms?",
-        title: "Instituto Geográfico Nacional",
-        ptype: "gxp_wmscsource"
-    },
     Geodesia: {
-		url: "http://192.168.12.133:8080/geoserver/Geodesia/wms?",
+        url: "http://192.168.0.107:8080/geoserver/Geodesia/wms?",
         title: "Geodesia",
         ptype: "gxp_wmscsource"
     },
-	hidraulica: {
+    Arba: {
+        url: "http://cartoservices.arba.gov.ar/geoserver/cartoservice/wms?",
+        title: "Arba",
+        ptype: "gxp_wmscsource"
+    },
+    hidraulica: {
         url: "http://www.mosp.gba.gov.ar/wms_hidraulica/cgi-bin/wmsserv.exe",
         title: "Buenos Aires - Dccion. Hidraulica",
         ptype: "gxp_wmscsource"
@@ -38,5 +33,5 @@ var sources = {
     },
     mapquest: {
     ptype: "gxp_mapquestsource"
-}
+    }
 }

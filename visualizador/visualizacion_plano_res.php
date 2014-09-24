@@ -1,4 +1,4 @@
-<?
+<?php
  // session_name('ui_geo');
  // session_start();
  // require_once('funciones.php');
@@ -39,7 +39,7 @@ function ShowCommand(cmdName, bShow){
 <object id = "ADViewer"  
 classid = "clsid:A662DA7E-CCB7-4743-B71A-D817F6D575DF"
 border = "1" width = "75%" height = "90%">
-<param name = "Src" value=<? echo $archivo; ?>>
+<param name = "Src" value=<?php echo $archivo; ?>>
 <param name="ToolbarVisible" value="False">
 </object>
 <br>

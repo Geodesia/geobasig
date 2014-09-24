@@ -25,13 +25,13 @@ function ShowCommand(cmdName, bShow){
 }
 </script>
 
-<?php /*
+<?php
   $ Sys = {};
   $ ua = navigator.userAgent.toLowerCase();
   $ s;
   (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] : 0;
   if(Sys.ie){
- 	*/?> 
+ 	 
 
 		<script type="text/javascript" FOR="ADViewer" EVENT="OnEndLoadItem(bstrItemName,vData,vResult)">
 		  if(bstrItemName == "SHEET")
@@ -51,12 +51,10 @@ function ShowCommand(cmdName, bShow){
 		<param name="ToolbarVisible" value="False">
 		</object>
 		<br>
- 	<?php
-  			//}
-  /*			
+ 	  		
  else
   {
-  ?>
+  
     <!-- Hide IE OBJECT. -->
     <script type="text/javascript">
       var Sys = {};
@@ -70,12 +68,28 @@ function ShowCommand(cmdName, bShow){
       }
     </script>
 <!-- plugin para firefox-->
-	<object id="ADR" type="application/x-Autodesk-DWF" width="100%" height="100%">
+	<object id="ADViewer" type="application/x-Autodesk-DWF" border="1" width="100%" height="100%">
 	<param name = "dwffilename" value=<? echo $archivo; ?>>
 	<param name="ToolbarVisible" value="False">
 	</object>
-	 <?php
-  } */
+  <script type="text/javascript" FOR="ADViewer" EVENT="OnEndLoadItem(ItemName,Data,Result)">
+  // ####################################
+  // Event for type of DWF loaded
+  // ####################################
+    if (ItemName == "SECTION")
+      FillContent()
+      
+    if (ItemName == "VIEWER")
+    {
+      //Turn off all the UI
+      Commands = ADViewer.ECompositeViewer.Commands;
+      Commands('TOOLBAR').Toggled = false; // hide standard toolbar
+      Commands('ANIMATIONBAR').Toggled = false; // hide Animation bar
+      Commands('DATAFRAMEUI').Toggled = false; // hide data pane
+      Commands("GRIDROLLOVER").Toggled = false; // hide the grid roll over (up arrow)
+      Commands("CANVASTITLE").Toggled = false; // hide canvas title bar         
+    }
+  }
   ?>
 <br>
 </body>
